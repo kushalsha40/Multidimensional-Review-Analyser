@@ -1,13 +1,6 @@
 # Loading Pretrained BERT
 import pandas as pd
 
-from sentence_transformers import SentenceTransformer   
-model_bert = SentenceTransformer('all-MiniLM-L6-v2')
-
-# Converting the reviews to Embedings
-data = pd.read_csv('../data/imdb_dataset.csv')
-embeddings = model_bert.encode(data['review'].tolist())
-
 # Similarity funtion
 
 from sklearn.metrics.pairwise import cosine_similarity
