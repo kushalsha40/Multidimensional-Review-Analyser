@@ -6,28 +6,29 @@ aspects = {
     "acting": ["acting", "actor", "performance"],
     "visuals": ["visual", "cinematography", "vfx"],
     "music": ["music", "song", "background"],
-    "direction": ["director", "direction"]
+    "direction": ["director", "direction"],
 }
+
+label_map = {0: "negative", 1: "positive"}
+
 
 def classify_aspect(review, tfidf, model):
     review = review.lower()
-    sentence = nltk.sent_tokenize(review)
+    sentences = nltk.sent_tokenize(review)
 
     result = {}
-    aspect_sentiments = []
-    for aspect , keywords in aspects.items():
-        
-        for sent in sentence:
-            for word in keywords:
-                if word in sent:
-                    vec = tfidf.transform([sent])
-                    pred = model.predict(vec)[0]
-                    aspect_sentiments.append(pred)
+    for aspect, keywords in aspects.items():
+        aspect_sentiments = []
 
-        if len(aspect_sentiments) == 0:
-            result[aspect] = 'neutral'
+        for sentence in sentences:
+            if any(keyword in sentence for keyword in keywords):
+                vec = tfidf.transform([sentence])
+                pred = int(model.predict(vec)[0])
+                aspect_sentiments.append(label_map[pred])
+
+        if not aspect_sentiments:
+            result[aspect] = "neutral"
         else:
-            result[aspect] = max(set(aspect_sentiments), key = aspect_sentiments.count)
-    
-    
+            result[aspect] = max(set(aspect_sentiments), key=aspect_sentiments.count)
+
     return result
