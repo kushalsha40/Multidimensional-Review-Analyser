@@ -83,15 +83,4 @@ def get_similar_reviews(review, top_n=3, embeddings=None, reviews=None, model_di
     query_vec = model_bert.encode([review])
     scores = cosine_similarity(query_vec, embeddings)[0]
     similar_idx = scores.argsort()[-top_n:][::-1]
-
-    similar_reviews = []
-    for rank, idx in enumerate(similar_idx, start=1):
-        similar_reviews.append(
-            {
-                "rank": rank,
-                "similarity_score": round(float(scores[idx]), 4),
-                "review": reviews[idx],
-            }
-        )
-
-    return similar_reviews
+    return [reviews[i] for i in similar_idx]

@@ -3,6 +3,7 @@ from pathlib import Path
 
 try:
     from src.aspect import classify_aspect
+    
     from src.emotion import get_emotion_score
     from src.sentiment import load_sentiment_artifacts, predict_sentiment
     from src.similarity import get_similar_reviews, load_similarity_artifacts
@@ -17,8 +18,7 @@ except ModuleNotFoundError:
     from similarity import get_similar_reviews, load_similarity_artifacts
     from style import get_writing_style
     from text_preprocessing import pipeline
-
-
+print("Modules imported successfully.")
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MODELS_DIR = PROJECT_ROOT / "models"
 
@@ -31,13 +31,8 @@ def load_runtime_artifacts():
 
     embeddings = None
     reviews = None
-    try:
+    if (MODELS_DIR / "bert_embeddings.pkl").exists() and (MODELS_DIR / "reviews.pkl").exists():
         embeddings, reviews = load_similarity_artifacts(MODELS_DIR)
-    except (FileNotFoundError, EOFError, RuntimeError, ValueError):
-        # Similarity artifacts are optional. If they have not been generated yet
-        # or were only partially written, keep the rest of the analysis working.
-        embeddings = None
-        reviews = None
 
     return tfidf, sentiment_model, embeddings, reviews
 
@@ -78,3 +73,4 @@ def analyze_review(review):
         "aspect": aspect,
         "similar_reviews": similar_reviews,
     }
+print("Pipeline functions defined successfully.")
