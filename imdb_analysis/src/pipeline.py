@@ -3,7 +3,6 @@ from pathlib import Path
 
 try:
     from src.aspect import classify_aspect
-    
     from src.emotion import get_emotion_score
     from src.sentiment import load_sentiment_artifacts, predict_sentiment
     from src.similarity import get_similar_reviews, load_similarity_artifacts
@@ -18,7 +17,7 @@ except ModuleNotFoundError:
     from similarity import get_similar_reviews, load_similarity_artifacts
     from style import get_writing_style
     from text_preprocessing import pipeline
-print("Modules imported successfully.")
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MODELS_DIR = PROJECT_ROOT / "models"
 
@@ -54,7 +53,7 @@ def analyze_review(review):
     if embeddings is not None and reviews is not None:
         try:
             similar_reviews = get_similar_reviews(
-                cleaned_review,
+
                 top_n=3,
                 embeddings=embeddings,
                 reviews=reviews,
